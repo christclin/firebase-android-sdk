@@ -245,7 +245,12 @@ public class AppStartTrace implements ActivityLifecycleCallbacks {
   public synchronized void onActivityStopped(Activity activity) {}
 
   @Override
-  public void onActivityDestroyed(Activity activity) {}
+  public void onActivityDestroyed(Activity activity) {
+    // Filter Activities that possibly finish in onCreate() and do nothing
+    if (onCreateTime != null && onResumeTime == null) {
+      unregisterActivityLifecycleCallbacks();
+    }
+  }
 
   @Override
   public void onActivitySaveInstanceState(Activity activity, Bundle outState) {}
